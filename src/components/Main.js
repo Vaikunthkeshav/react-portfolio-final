@@ -34,7 +34,7 @@ position: absolute;
 top: 2rem;
 right: calc(1rem + 2vw);
 text-decoration: none;
-z-index:3;
+z-index:4;
 `
 
 const BLOG = styled(NavLink)`
@@ -44,7 +44,7 @@ top: 50%;
 right: calc(1rem + 2vw);
 transform: rotate(90deg) translate(-50%, -50%);
 text-decoration: none;
-z-index:3;
+z-index:4;
 `
 
 const WORK = styled(NavLink)`
@@ -54,7 +54,7 @@ top: 50%;
 left: calc(1rem + 2vw);
 transform: translate(-50%, -50%) rotate(-90deg) ;
 text-decoration: none;
-z-index:3;
+z-index:4;
 `
 
 const BottomBar = styled.div`
@@ -65,19 +65,19 @@ right: 0;
 width: 100%;
 display: flex;
 justify-content: space-evenly;
-z-index:3;
+z-index:4;
 `
 
 const ABOUT = styled(NavLink)`
 color: ${props => props.click ? props.theme.body : props.theme.text};
 text-decoration: none;
-z-index:3;
+z-index:4;
 `
 
 const SKILLS = styled(NavLink)`
 color: ${props => props.theme.text};
 text-decoration: none;
-z-index:3;
+z-index:4;
 `
 
 const rotate = keyframes`
@@ -98,7 +98,7 @@ border: none;
 outline: none;
 background-color: transparent;
 cursor: pointer;
-z-index: 3;
+z-index: 4;
 
 display: flex;
 flex-direction: column;
@@ -113,6 +113,7 @@ transition: all 1s ease;
 &>:last-child{
     display: ${props => props.click ? 'none' :'inline-block'  };
     padding-top: 1rem;
+    color: ${props => props.theme.text};
 }
 `
 
@@ -128,6 +129,11 @@ z-index:1;
 transition: height 0.5s ease, width 1s ease 0.5s;
 `
 
+const IntroWrapper = styled.div`
+position: relative;
+z-index: 3;
+`
+
 const Main = () => {
     const [click, setClick] = useState(true);
 
@@ -135,7 +141,7 @@ const Main = () => {
 
     return (
         <MainContainer>
-            {/* Enhanced Dense Particle Network Background */}
+            {/* Dense Particle Network Background */}
             <ParticleComponent theme={click ? 'dark' : 'light'} />
             
             <DarkDiv click={click}/>
@@ -237,7 +243,11 @@ const Main = () => {
                 </BottomBar>
             </Container>
             
-            {click ? <Intro click={click} /> : null }
+            {click ? (
+                <IntroWrapper>
+                    <Intro click={click} />
+                </IntroWrapper>
+            ) : null }
         </MainContainer>
     )
 }
