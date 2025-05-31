@@ -5,7 +5,6 @@ import styled, { keyframes } from 'styled-components'
 import LogoComponent from '../subComponents/LogoComponent'
 import PowerButton from '../subComponents/PowerButton'
 import SocialIcons from '../subComponents/SocialIcons'
-import { YinYang } from './AllSvgs'
 import Intro from './Intro'
 
 const MainContainer = styled.div`
@@ -13,7 +12,6 @@ background: ${props => props.theme.body};
 width: 100vw;
 height: 100vh;
 overflow:hidden;
-
 position: relative;
 
 h2,h3,h4,h5,h6{
@@ -34,6 +32,7 @@ right: calc(1rem + 2vw);
 text-decoration: none;
 z-index:1;
 `
+
 const BLOG = styled(NavLink)`
 color: ${props => props.theme.text};
 position: absolute;
@@ -43,9 +42,9 @@ transform: rotate(90deg) translate(-50%, -50%);
 text-decoration: none;
 z-index:1;
 `
+
 const WORK = styled(NavLink)`
 color: ${props => props.click ? props.theme.body : props.theme.text};
-
 position: absolute;
 top: 50%;
 left: calc(1rem + 2vw);
@@ -60,7 +59,6 @@ bottom: 1rem;
 left: 0;
 right: 0;
 width: 100%;
-
 display: flex;
 justify-content: space-evenly;
 `
@@ -70,45 +68,114 @@ color: ${props => props.click ? props.theme.body : props.theme.text};
 text-decoration: none;
 z-index:1;
 `
+
 const SKILLS = styled(NavLink)`
 color: ${props => props.theme.text};
 text-decoration: none;
 z-index:1;
 `
 
-const rotate = keyframes`
-from{
-    transform: rotate(0);
-}
-to{
-    transform: rotate(360deg);
-}
+// ATOM BUTTON ANIMATIONS
+const pulse = keyframes`
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
 `
 
-const Center = styled.button`
+const orbit = keyframes`
+  from { transform: rotate(0deg) translateX(30px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(30px) rotate(-360deg); }
+`
+
+const float = keyframes`
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+`
+
+// ATOM BUTTON COMPONENTS
+const AtomButton = styled.button`
 position: absolute;
 top: ${props => props.click ? '85%' :'50%'  };
 left: ${props => props.click ? '92%' :'50%'  };
 transform: translate(-50%,-50%);
 border: none;
 outline: none;
-background-color: transparent;
+background: transparent;
 cursor: pointer;
+width: ${props => props.click ? '80px' : '120px'};
+height: ${props => props.click ? '80px' : '120px'};
+transition: all 1s ease;
 
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-transition: all 1s ease;
+`
 
-&>:first-child{
-    animation: ${rotate} infinite 1.5s linear;
+const CentralAtom = styled.div`
+width: 20px;
+height: 20px;
+background: ${props => props.theme.text};
+border-radius: 50%;
+position: relative;
+animation: ${pulse} 2s infinite;
+box-shadow: 0 0 20px ${props => props.theme.text};
+z-index: 1;
+`
+
+const Electron = styled.div`
+position: absolute;
+width: 6px;
+height: 6px;
+background: #ffd700;
+border-radius: 50%;
+opacity: 0.9;
+animation: ${orbit} 3s infinite linear;
+box-shadow: 0 0 10px #ffd700;
+
+&:nth-child(2) {
+  animation-delay: -1s;
+  animation-duration: 2.5s;
 }
 
-&>:last-child{
-    display: ${props => props.click ? 'none' :'inline-block'  };
-    padding-top: 1rem;
+&:nth-child(3) {
+  animation-delay: -2s;
+  animation-duration: 4s;
 }
+
+&:nth-child(4) {
+  animation-delay: -0.5s;
+  animation-duration: 3.5s;
+}
+
+&:nth-child(5) {
+  animation-delay: -1.5s;
+  animation-duration: 3.8s;
+}
+`
+
+const FloatingParticle = styled.div`
+position: absolute;
+width: 3px;
+height: 3px;
+background: ${props => props.theme.text};
+border-radius: 50%;
+opacity: 0.6;
+animation: ${float} 4s infinite ease-in-out;
+
+&:nth-child(6) { top: -40px; left: -30px; animation-delay: -1s; }
+&:nth-child(7) { top: -30px; right: -40px; animation-delay: -2s; }
+&:nth-child(8) { bottom: -40px; left: -25px; animation-delay: -3s; }
+&:nth-child(9) { bottom: -30px; right: -35px; animation-delay: -4s; }
+&:nth-child(10) { top: 15px; left: -50px; animation-delay: -5s; }
+&:nth-child(11) { top: 25px; right: -45px; animation-delay: -0.5s; }
+`
+
+const ClickText = styled.span`
+display: ${props => props.click ? 'none' :'block'  };
+margin-top: 1rem;
+color: ${props => props.theme.text};
+font-size: 0.8rem;
+opacity: 0.8;
 `
 
 const DarkDiv = styled.div`
@@ -124,23 +191,33 @@ transition: height 0.5s ease, width 1s ease 0.5s;
 `
 
 const Main = () => {
-
-    const [click, setClick] = useState(false);
+    const [click, setClick] = useState(true);
 
     const handleClick = () => setClick(!click);
 
     return (
         <MainContainer>
-         <DarkDiv   click={click}/>
+         <DarkDiv click={click}/>
             <Container>
             <PowerButton />
             <LogoComponent theme={click ? 'dark' :'light'}/>
             <SocialIcons theme={click ? 'dark' :'light'} />
            
-            <Center click={click}>
-                <YinYang  onClick={()=> handleClick()} width={click ? 120 : 200} height={click ? 120 : 200} fill='currentColor' />
-                <span>click here</span>
-            </Center>
+            <AtomButton click={click} onClick={handleClick}>
+                <CentralAtom />
+                <Electron />
+                <Electron />
+                <Electron />
+                <Electron />
+                <Electron />
+                <FloatingParticle />
+                <FloatingParticle />
+                <FloatingParticle />
+                <FloatingParticle />
+                <FloatingParticle />
+                <FloatingParticle />
+                <ClickText click={click}>click here</ClickText>
+            </AtomButton>
 
             <Contact target="_blank" href="mailto:vakr3628@colorado.edu">
                 <motion.h2
@@ -154,11 +231,11 @@ const Main = () => {
                 }}
                 whileHover={{scale: 1.1}}
                 whileTap={{scale: 0.9}}
-                
                 >
                     Say hi..
                 </motion.h2>
             </Contact>
+
             <BLOG to="/blog">
                 <motion.h2
                 initial={{
@@ -175,6 +252,7 @@ const Main = () => {
                     Blog
                 </motion.h2>
             </BLOG>
+
             <WORK to="/work" click={+click}>
                 <motion.h2
                 initial={{
@@ -191,6 +269,7 @@ const Main = () => {
                     Work
                 </motion.h2>
             </WORK>
+
             <BottomBar>
             <ABOUT to="/about" click={+click}>
                 <motion.h2
@@ -208,6 +287,7 @@ const Main = () => {
                     About.
                 </motion.h2>
             </ABOUT>
+
             <SKILLS to="/skills">
                 <motion.h2
                 initial={{
