@@ -1,98 +1,151 @@
-import React, { useEffect, useRef } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import { DarkTheme } from "./Themes";
-import { motion } from "framer-motion";
-
-import LogoComponent from "../subComponents/LogoComponent";
-import SocialIcons from "../subComponents/SocialIcons";
-import PowerButton from "../subComponents/PowerButton";
-
-import { Work } from "../data/WorkData";
-import Card from "../subComponents/Card";
-import { YinYang } from "./AllSvgs";
-import BigTitlte from "../subComponents/BigTitlte";
+import React, { useEffect, useState } from 'react'
+import styled, { ThemeProvider } from 'styled-components'
+import {DarkTheme} from './Themes';
+import {motion} from 'framer-motion'
+import LogoComponent from '../subComponents/LogoComponent'
+import SocialIcons from '../subComponents/SocialIcons'
+import PowerButton from '../subComponents/PowerButton'
+import ParticleComponent from '../subComponents/ParticleComponent'
+import BigTitle from '../subComponents/BigTitlte'
 
 const Box = styled.div`
-  background-color: ${(props) => props.theme.body};
-
-  height: 400vh;
-  position: relative;
-  display: flex;
-  align-items: center;
-`;
+background-color: ${props => props.theme.body};
+width: 100vw;
+height:100vh;
+position: relative;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+`
 
 const Main = styled(motion.ul)`
-  position: fixed;
-  top: 12rem;
-  left: calc(10rem + 15vw);
-  height: 40vh;
-  display: flex;
+position: fixed;
+top: 12rem;
+left: calc(10rem + 15vw);
+height: 40vh;
+display: flex;
+color: white;
+z-index:3;
+`
 
-  color: white;
-`;
-const Rotate = styled.span`
-  display: block;
-  position: fixed;
-  right: 1rem;
-  bottom: 1rem;
-  width: 80px;
-  height: 80px;
-  z-index: 1;
-`;
+const Project = styled(motion.li)`
+width: 16rem;
+height: 40vh;
+background-color: ${props => props.theme.text};
+color: ${props => props.theme.body};
+padding: 1rem;
+margin-right: 6rem;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+border: 1px solid ${props => props.theme.body};
+cursor: pointer;
 
-// Framer-motion Configuration
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
+&:hover{
+    background-color: ${props => props.theme.body};
+    color: ${props => props.theme.text};
+    border: 1px solid ${props => props.theme.text};
+}
+`
 
-    transition: {
-      staggerChildren: 0.5,
-      duration: 0.5,
-    },
-  },
-};
+const Title = styled.h2`
+font-size: calc(1em + 0.5vw);
+`
+
+const Description = styled.div`
+color: ${props => props.theme.text};
+font-size: calc(0.8em + 0.3vw);
+font-family: 'Karla', sans-serif;
+font-weight: 500;
+
+${Project}:hover &{
+    color: ${props => props.theme.body};
+}
+`
+
+const Tags = styled.div`
+border-top: 2px solid ${props => props.theme.body};
+padding-top: 0.5rem;
+display: flex;
+flex-wrap: wrap;
+
+${Project}:hover &{
+    border-top: 2px solid ${props => props.theme.text};
+}
+`
+
+const Tag = styled.span`
+margin-right: 1rem;
+font-size: 0.9rem;
+`
 
 const WorkPage = () => {
-  const ref = useRef(null);
-  const yinyang = useRef(null);
+    const [work, setWork] = useState([
+        {
+            id: 1,
+            name: "Mario Kart Balloon Battle Robot",
+            description: "Autonomous robot with mecanum wheels, sensors, and PixyCam for object detection in Mario Kart Balloon Battle competition.",
+            tags: ["Robotics", "Computer Vision", "Autonomous Systems"],
+            demo: "",
+            github: ""
+        },
+        {
+            id: 2,
+            name: "4-DOF Robotic Arm Simulation",
+            description: "Simulated robotic arm with gripper using forward kinematics for motion control in SolidWorks.",
+            tags: ["Robotics", "SolidWorks", "Kinematics"],
+            demo: "",
+            github: ""
+        },
+        {
+            id: 3,
+            name: "Pressure Vessel Design",
+            description: "Designed pressure vessels and heat exchangers optimizing manufacturing process and ensuring ANSI B16 compliance.",
+            tags: ["CAD", "AutoCAD", "ANSI Standards"],
+            demo: "",
+            github: ""
+        },
+        {
+            id: 4,
+            name: "Chocolate Winnowing Machine",
+            description: "Novel design for cacao winnowing machine with integrated vacuum to improve efficiency and reduce cost to $441.80.",
+            tags: ["Product Design", "Manufacturing", "Cost Optimization"],
+            demo: "",
+            github: ""
+        }
+    ]);
 
-  useEffect(() => {
-    let element = ref.current;
+    return (
+        <ThemeProvider theme={DarkTheme}>
+            <Box>
+                <LogoComponent theme='dark'/>
+                <SocialIcons theme='dark'/>
+                <PowerButton />
+                <ParticleComponent theme='dark' />
 
-    const rotate = () => {
-      element.style.transform = `translateX(${-window.pageYOffset}px)`;
+                <Main>
+                    {work.map(d => 
+                        <Project key={d.id}
+                        initial={{opacity:0}}
+                        animate={{opacity:1}}
+                        transition={{duration:1, delay:1}}
+                        >
+                            <Title>{d.name}</Title>
+                            <Description>
+                                {d.description}
+                            </Description>
+                            <Tags>
+                                {d.tags.map((t,id) => 
+                                    <Tag key={id}>#{t}</Tag>
+                                )}
+                            </Tags>
+                        </Project>
+                    )}
+                </Main>
+                <BigTitle text="WORK" top="10%" right="20%" />
+            </Box>
+        </ThemeProvider>
+    )
+}
 
-      return (yinyang.current.style.transform =
-        "rotate(" + -window.pageYOffset + "deg)");
-    };
-
-    window.addEventListener("scroll", rotate);
-    return () => {
-      window.removeEventListener("scroll", rotate);
-    };
-  }, []);
-
-  return (
-    <ThemeProvider theme={DarkTheme}>
-      <Box>
-        <LogoComponent theme="dark" />
-        <SocialIcons theme="dark" />
-        <PowerButton />
-
-        <Main ref={ref} variants={container} initial="hidden" animate="show">
-          {Work.map((d) => (
-            <Card key={d.id} data={d} />
-          ))}
-        </Main>
-        <Rotate ref={yinyang}>
-          <YinYang width={80} height={80} fill={DarkTheme.text} />
-        </Rotate>
-
-        <BigTitlte text="WORK" top="10%" right="20%" />
-      </Box>
-    </ThemeProvider>
-  );
-};
-
-export default WorkPage;
+export default WorkPage
