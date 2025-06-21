@@ -1,99 +1,83 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import img from "../assets/Images/patrick-tomasso-Oaqk7qqNh_c-unsplash.jpg"
+import React from 'react'
+import styled, { ThemeProvider } from 'styled-components'
+import {DarkTheme} from './Themes';
 import LogoComponent from '../subComponents/LogoComponent'
-import SocialIcons  from '../subComponents/SocialIcons'
-import PowerButton  from '../subComponents/PowerButton'
+import SocialIcons from '../subComponents/SocialIcons'
+import PowerButton from '../subComponents/PowerButton'
+import ParticleComponent from '../subComponents/ParticleComponent'
+import BigTitle from '../subComponents/BigTitlte'
 
-import {Blogs} from '../data/BlogData';
-import BlogComponent from './BlogComponent'
-import AnchorComponent from '../subComponents/Anchor'
-import BigTitle from "../subComponents/BigTitlte"
-import { motion } from 'framer-motion'
-
-
-const MainContainer = styled(motion.div)`
-background-image: url(${img});
-background-size: cover;
-background-repeat: no-repeat;
-background-attachment: fixed;
-background-position: center;
-`
-const Container = styled.div`
-background-color: ${props => `rgba(${props.theme.bodyRgba},0.8)`};
-width: 100%;
-height:auto;
-
+const Box = styled.div`
+background-color: ${props => props.theme.body};
+width: 100vw;
+height:100vh;
 position: relative;
-padding-bottom: 5rem;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
 `
 
-const Center = styled.div`
+const Main = styled.div`
+border: 2px solid ${props => props.theme.text};
+color: ${props => props.theme.text};
+background-color: ${props => props.theme.body};
+padding: 2rem;
+width: 50vw;
+height: 60vh;
+z-index: 3;
+line-height: 1.5;
+font-family: 'Ubuntu Mono', monospace;
+font-style: italic;
 display: flex;
+flex-direction: column;
 justify-content: center;
 align-items: center;
-padding-top: 10rem;
+position: absolute;
+left: calc(5rem + 5vw);
+top: 10rem;
+text-align: center;
+
+&:hover{
+    color: ${props => props.theme.body};
+    background-color: ${props => props.theme.text};
+}
 `
 
-const Grid = styled.div`
-display: grid;
-grid-template-columns: repeat(2, minmax(calc(10rem + 15vw), 1fr));
-grid-gap: calc(1rem + 2vw);
+const Title = styled.h1`
+font-size: 2rem;
+margin-bottom: 2rem;
 `
 
-// Framer-motion config
-const container = {
-
-    hidden: {opacity:0},
-    show: {
-      opacity:1,
-  
-      transition:{
-        staggerChildren: 0.5,
-        duration: 0.5,
-      }
-    }
-  
-  }
+const Description = styled.p`
+font-size: 1.2rem;
+margin-bottom: 1rem;
+`
 
 const BlogPage = () => {
-
-    const [numbers, setNumbers] = useState(0);
-
-    useEffect(() => {
-        let num = (window.innerHeight - 70)/30;
-        setNumbers(parseInt(num));
-    }, [])
-
-
     return (
-        <MainContainer
-        variants={container}
-        initial='hidden'
-        animate='show'
-        exit={{
-            opacity:0, transition:{duration: 0.5}
-        }}
-        >
-            <Container>
-                <LogoComponent />
+        <ThemeProvider theme={DarkTheme}>
+            <Box>
+                <LogoComponent theme='dark'/>
+                <SocialIcons theme='dark'/>
                 <PowerButton />
-                <SocialIcons />
-                <AnchorComponent number={numbers}/>
-<Center>
-<Grid>
-
-{
-    Blogs.map(blog => {
-        return <BlogComponent key={blog.id} blog={blog} />
-    })
-}
-</Grid>
-
-</Center>
-<BigTitle text="BLOG" top="5rem" left="5rem" />
-            </Container>
-        </MainContainer>
+                <ParticleComponent theme='dark' />
+                
+                <Main>
+                    <Title>Coming Soon</Title>
+                    <Description>
+                        I'm currently focused on my mechanical engineering studies and research projects.
+                    </Description>
+                    <Description>
+                        Blog posts about robotics, engineering design, and graduate school experiences will be added soon.
+                    </Description>
+                    <Description>
+                        Stay tuned for insights into mechanical engineering projects and academic journey!
+                    </Description>
+                </Main>
+                
+                <BigTitle text="BLOG" top="10%" right="20%" />
+            </Box>
+        </ThemeProvider>
     )
 }
 
